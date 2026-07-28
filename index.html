@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medkhen AI - 临床思维链封装平台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #f8f9fa;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+        .hero {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: #fff;
+            padding: 80px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.03) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+        .logo-text { font-size: 48px; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; }
+        .logo-text span { color: #4ecdc4; }
+        .tagline { font-size: 20px; color: rgba(255,255,255,0.85); margin-bottom: 16px; font-weight: 300; }
+        .hero-desc { font-size: 15px; color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto; }
+        .stats-bar { background: #fff; max-width: 900px; margin: -30px auto 40px; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); display: flex; padding: 24px 0; position: relative; z-index: 2; }
+        .stat-item { flex: 1; text-align: center; border-right: 1px solid #eee; }
+        .stat-item:last-child { border-right: none; }
+        .stat-num { font-size: 28px; font-weight: 700; color: #2c5364; }
+        .stat-label { font-size: 13px; color: #888; margin-top: 4px; }
+        .section { max-width: 1000px; margin: 0 auto; padding: 0 20px 60px; }
+        .section-title { text-align: center; font-size: 28px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; }
+        .section-subtitle { text-align: center; font-size: 15px; color: #888; margin-bottom: 40px; }
+        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .product-card { background: #fff; border-radius: 16px; padding: 32px 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+        .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+        .product-card:nth-child(1)::before { background: linear-gradient(90deg, #4ecdc4, #44b09e); }
+        .product-card:nth-child(2)::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+        .product-card:nth-child(3)::before { background: linear-gradient(90deg, #f093fb, #f5576c); }
+        .product-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 20px; }
+        .product-card:nth-child(1) .product-icon { background: rgba(78,205,196,0.1); }
+        .product-card:nth-child(2) .product-icon { background: rgba(102,126,234,0.1); }
+        .product-card:nth-child(3) .product-icon { background: rgba(245,87,108,0.1); }
+        .product-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: #1a1a2e; }
+        .product-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 20px; margin-bottom: 16px; }
+        .product-card:nth-child(1) .product-tag { background: rgba(78,205,196,0.15); color: #2c9e8f; }
+        .product-card:nth-child(2) .product-tag { background: rgba(102,126,234,0.15); color: #5a6fd6; }
+        .product-card:nth-child(3) .product-tag { background: rgba(245,87,108,0.15); color: #e04358; }
+        .product-desc { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.7; }
+        .product-features { list-style: none; margin-bottom: 24px; }
+        .product-features li { font-size: 13px; color: #555; padding: 4px 0; padding-left: 20px; position: relative; }
+        .product-features li::before { content: '✓'; position: absolute; left: 0; font-weight: 700; }
+        .product-card:nth-child(1) .product-features li::before { color: #4ecdc4; }
+        .product-card:nth-child(2) .product-features li::before { color: #667eea; }
+        .product-card:nth-child(3) .product-features li::before { color: #f5576c; }
+        .try-btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: all 0.2s ease; }
+        .product-card:nth-child(1) .try-btn { background: linear-gradient(135deg, #4ecdc4, #44b09e); color: #fff; }
+        .product-card:nth-child(2) .try-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+        .product-card:nth-child(3) .try-btn { background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; }
+        .try-btn:hover { opacity: 0.9; transform: scale(1.02); }
+        .about { background: #fff; border-radius: 16px; padding: 48px 40px; margin: 0 auto 60px; max-width: 1000px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+        .about h2 { font-size: 24px; font-weight: 700; color: #1a1a2e; margin-bottom: 20px; }
+        .about p { font-size: 15px; color: #555; line-height: 1.8; margin-bottom: 16px; }
+        .about-highlight { background: linear-gradient(135deg, rgba(78,205,196,0.08), rgba(44,83,100,0.08)); border-radius: 12px; padding: 24px; margin-top: 24px; }
+        .about-highlight h3 { font-size: 16px; color: #2c5364; margin-bottom: 12px; }
+        .about-highlight ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+        .about-highlight li { font-size: 14px; color: #444; padding-left: 24px; position: relative; }
+        .about-highlight li::before { content: '◆'; position: absolute; left: 0; color: #4ecdc4; font-size: 10px; top: 3px; }
+        footer { background: #1a1a2e; color: rgba(255,255,255,0.5); text-align: center; padding: 32px 20px; font-size: 13px; }
+        footer a { color: #4ecdc4; text-decoration: none; }
+        @media (max-width: 768px) {
+            .logo-text { font-size: 36px; }
+            .tagline { font-size: 17px; }
+            .stats-bar { flex-direction: column; gap: 16px; margin: -20px 16px 30px; padding: 20px; }
+            .stat-item { border-right: none; border-bottom: 1px solid #eee; padding-bottom: 12px; }
+            .stat-item:last-child { border-bottom: none; }
+            .products { grid-template-columns: 1fr; }
+            .about { margin: 0 16px 40px; padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+<div class="hero">
+    <div class="hero-content">
+        <div class="logo-text">Med<span>khen</span> AI</div>
+        <div class="tagline">临床思维链封装平台</div>
+        <div class="hero-desc">基于 AI 大模型，为医学教育提供智能化教案生成、试题命题与考试分析全流程解决方案</div>
+    </div>
+</div>
+<div class="stats-bar">
+    <div class="stat-item">
+        <div class="stat-num">3</div>
+        <div class="stat-label">核心智能体</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">全学科</div>
+        <div class="stat-label">内·外·妇·儿·急诊</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">10min</div>
+        <div class="stat-label">教案/试卷生成</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">OA</div>
+        <div class="stat-label">标准格式输出</div>
+    </div>
+</div>
+<div class="section">
+    <div class="section-title">产品矩阵</div>
+    <div class="section-subtitle">覆盖临床教学「备课 → 考核 → 分析」全链路</div>
+    <div class="products">
+        <div class="product-card">
+            <div class="product-icon">📋</div>
+            <div class="product-name">临床融合基础 CBL 教案专家</div>
+            <div class="product-tag">教案生成</div>
+            <div class="product-desc">输入教学参数与完整病例，自动生成符合医院 OA 标准的 CBL 教案，含教师版与学生版双版本输出。</div>
+            <ul class="product-features">
+                <li>自动融合临床与基础知识点</li>
+                <li>教师版含答案解析与考纲标注</li>
+                <li>学生版分层问题不含答案</li>
+                <li>支持文件上传与质量评分</li>
+            </ul>
+            <a href="https://www.coze.cn/store/agent/7613051906357035014?bot_id=true" target="_blank" class="try-btn">立即体验 →</a>
+        </div>
+        <div class="product-card">
+            <div class="product-icon">🏥</div>
+            <div class="product-name">OSCE 柔性试题生成助手</div>
+            <div class="product-tag">OSCE 考核</div>
+            <div class="product-desc">输入疾病名称或患者病例，一键生成完整 OSCE 考核套件，含学生案例、考官评分标准与 SP 对话脚本。</div>
+            <ul class="product-features">
+                <li>自动生成学生案例题（无泄漏线索）</li>
+                <li>100 分制考官评分标准细化到采分点</li>
+                <li>SP 标准化病人对话脚本 40-50 条</li>
+                <li>HTML 输出，支持打印为 PDF</li>
+            </ul>
+            <a href="https://www.coze.cn/store/agent/7649615852584861739?bot_id=true" target="_blank" class="try-btn">立即体验 →</a>
+        </div>
+        <div class="product-card">
+            <div class="product-icon">📊</div>
+            <div class="product-name">临床命题与试卷分析专家</div>
+            <div class="product-tag">命题 · 分析</div>
+            <div class="product-desc">覆盖内·外·妇·儿全学科的 AI 命题与试卷分析引擎，支持按学科或器官系统出题，可上传成绩自动生成分析报告。</div>
+            <ul class="product-features">
+                <li>支持 A1/A2/A3/A4/X 全题型</li>
+                <li>可参考执医/考研真题风格命题</li>
+                <li>四度分析 + 薄弱点归因 + 教学建议</li>
+                <li>输出 Word + Excel 双格式</li>
+            </ul>
+            <a href="https://www.coze.cn/store/agent/7648601119300042767?bot_id=true" target="_blank" class="try-btn">立即体验 →</a>
+        </div>
+    </div>
+</div>
+<div class="about">
+    <h2>关于 Medkhen AI</h2>
+    <p>Medkhen AI 致力于将人工智能深度融入医学教育场景，为临床教师、教学管理者和医学院校提供高效、智能的教学工具。我们相信，AI 不是替代教师，而是让教师从重复性工作中解放出来，将更多精力投入到真正的教学创新中。</p>
+    <p>我们的产品基于临床思维链（Clinical Reasoning Chain）方法论，结合最新医学教材与教学大纲，确保生成内容的专业性与规范性。</p>
+    <div class="about-highlight">
+        <h3>核心优势</h3>
+        <ul>
+            <li>紧贴第10版教材与教学大纲</li>
+            <li>输出格式符合医院 OA 标准</li>
+            <li>支持多科室全学科覆盖</li>
+            <li>10分钟完成传统数小时工作量</li>
+            <li>教案/试题质量可量化评分</li>
+            <li>支持私有化部署与定制开发</li>
+        </ul>
+    </div>
+</div>
+<footer>
+    <p>&copy; 2026 Medkhen AI. All rights reserved.</p>
+    <p style="margin-top: 8px;"><a href="mailto:info@medkhen.com">info@medkhen.com</a></p>
+</footer>
+</body>
+</html>
